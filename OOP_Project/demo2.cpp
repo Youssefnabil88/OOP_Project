@@ -3,7 +3,7 @@
  Last Modification Date:	xx/xx/xxxx
  Author1: and ID and Group:	Abdelrahman Hossam Abdelrahman Farag 20221095
  Author2: and ID and Group:	Youssef Nabil Ismail waer  20221205
- ِAuther3: Mohamed Ahmed Abdelsamad Sayed
+ Auther3: Mohamed Ahmed Abdelsamad Sayed
  Teaching Assistant:		xxxxx xxxxx
  Purpose: Make filters for gray images
 */
@@ -15,10 +15,9 @@
 #include "bmplib.h"
 
 using namespace std;
-unsigned char image[SIZE][SIZE][3];
-unsigned char image1[SIZE][SIZE][3];
-unsigned char image2[SIZE][SIZE][3];
-
+unsigned char image[SIZE][SIZE];
+unsigned char image1[SIZE][SIZE];
+unsigned char image2[SIZE][SIZE];
 
 void loadImage();
 void enlarge() ;
@@ -34,6 +33,7 @@ void saveImage();
 void Shrink();
 void mirror();
 void crop();
+void shuffle();
 void skew_right();
 void skew_up();
 
@@ -52,7 +52,7 @@ int main() {
         cout << "8 - Enlarge Image"<<endl;
         cout << "9 - Shrink "<<endl;
         cout << "a - mirror" <<endl;
-        cout << "b - crop" <<endl;
+        cout << "b - shuffle" <<endl;
         cout << "c - Blur Image"<<endl;
         cout << "d - Crop Image"<<endl;
         cout << "e - Skew image right "<<endl;
@@ -92,6 +92,9 @@ int main() {
             case 'a':
                 mirror();
                 break;
+            case 'b':
+               shuffle();
+                break;
             case 'c':
                 Blur() ;
                 break;
@@ -128,7 +131,7 @@ void loadImage () {
 
     // Add to it .bmp extension and load image
     strcat (imageFileName, ".bmp");
-    readRGBBMP(imageFileName, image);
+    readGSBMP(imageFileName, image);
 }
 
 //_________________________________________
@@ -141,7 +144,7 @@ void saveImage () {
 
     // Add to it .bmp extension and load image
     strcat (imageFileName, ".bmp");
-    writeRGBBMP(imageFileName, image);
+    writeGSBMP(imageFileName, image);
 
 }
 
@@ -180,7 +183,7 @@ void merge() {
 
     // Add to it .bmp extension and load image
     strcat (imageFileName, ".bmp");
-    readRGBBMP(imageFileName, image1);
+    readGSBMP(imageFileName, image1);
 
 
     // Get gray scale image file name
@@ -189,7 +192,7 @@ void merge() {
 
     // Add to it .bmp extension and load image
     strcat (imageFileName, ".bmp");
-    readRGBBMP(imageFileName, image2);
+    readGSBMP(imageFileName, image2);
 
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j< SIZE; j++) {
@@ -207,7 +210,7 @@ void detected_edges(){
 
     // Add to it .bmp extension and load image
     strcat (imageFileName, ".bmp");
-    readRGBBMP(imageFileName, image1);
+    readGSBMP(imageFileName, image1);
 
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j< SIZE; j++) {
@@ -253,7 +256,7 @@ void flip(){
 
     // Add to it .bmp extension and load image
     strcat (imageFileName, ".bmp");
-    readRGBBMP(imageFileName, image1);
+    readGSBMP(imageFileName, image1);
 
 
 
@@ -287,7 +290,7 @@ void rotate (){
 
     // Add to it .bmp extension and load image
     strcat (imageFileName, ".bmp");
-    readRGBBMP(imageFileName, image1);
+    readGSBMP(imageFileName, image1);
     cout << "Enter the degree you want to rotate(90, 180, 270) : \n";
     int n;
     cin >> n;
@@ -355,7 +358,7 @@ void enlarge() {
 
     // Add to it .bmp extension and load image
     strcat (imageFileName, ".bmp");
-    readRGBBMP(imageFileName, image1);
+    readGSBMP(imageFileName, image1);
     if(quarter == 1){
         for (int i = 0; i < SIZE/2; i++) {
             for (int j = 0; j< SIZE/2; j++) {
@@ -414,7 +417,7 @@ void Shrink()
 
     // Add to it .bmp extension and load image
     strcat (imageFileName, ".bmp");
-    readRGBBMP(imageFileName, image1);
+    readGSBMP(imageFileName, image1);
 
     int num;
     cout << "Enter num (2,3,4): ";
@@ -561,7 +564,7 @@ void skew_up()
 
     // Add to it .bmp extension and load image
     strcat (imageFileName, ".bmp");
-    readRGBBMP(imageFileName, image1);
+    readGSBMP(imageFileName, image1);
 
     double deg;
     cout << "Enter deg : ";
@@ -571,14 +574,14 @@ void skew_up()
     double step_for_new = (double) left / SIZE;
     double here = 0;
     double curr = 0;
-
+    
     for(int j = 0;j < SIZE;j++)
     {
         curr = 0;
         for(int i = left - here;i < SIZE - here;i++)
         {
-
-
+           
+            
             int old_curr = max(0, (int) ceil(curr - step_for_original));
             int new_curr = min(SIZE, (int) ceil(curr + step_for_original));
             int sum = 0;
@@ -594,3 +597,79 @@ void skew_up()
         here += step_for_new;
     }
 }
+
+void shuffle()
+{
+    char imageFileName[100];
+    // Get gray scale image file name
+    cout << "Enter the source image file name: ";
+    cin >> imageFileName;
+
+    // Add to it .bmp extension and load image
+    strcat (imageFileName, ".bmp");
+    readGSBMP(imageFileName, image1);
+
+    int start_i[4] = {0, 0, 127, 127};
+    // int end_i[4] = {127, 127, SIZE, SIZE};
+    int start_j[4] = {0, 127, 0, 127};
+    // int end_j[4] = {127, SIZE, 127, SIZE};
+
+    int arr[4];
+
+    cout << "enter quarters : ";
+    for(int i = 0;i < 4;i++)
+    {
+        cin >> arr[i];
+    }
+
+    for(int i = 0;i < 127;i++)
+    {
+        for(int j = 0;j < 127;j++)
+        {
+            int a = start_i[arr[0] - 1];
+            int b = start_j[arr[0] - 1];
+            image[i][j] = image1[a+i][b+j];
+        }
+    }
+    int a = start_i[arr[1]-1], b = 0;
+    if(start_j[arr[1] - 1] == 0){
+        b = -127;
+    }
+
+    for(int i = 0;i < 127;i++)
+    {
+        for(int j = 127;j < SIZE;j++)
+        {
+            image[i][j] = image1[i+a][j+b];
+        }
+    }
+    a = 0;
+    b = start_j[arr[2]-1];
+    if(start_i[arr[2] - 1] == 0){
+        a = -127;
+    }
+    for(int i = 127;i < SIZE;i++)
+    {
+        for(int j = 0;j < 127;j++)
+        {
+            image[i][j] = image1[a+i][b+j];
+        }
+    }
+    a = 0;
+    b = 0;
+    if(start_i[arr[3]-1] == 0)
+    {
+        a = -127;
+    }
+    if(start_j[arr[3]-1] == 0)
+    {
+        b = -127;
+    }
+    for(int i = 127;i < SIZE;i++)
+    {
+        for(int j = 127;j < SIZE;j++)
+        {
+            image[i][j] = image1[a+i][b+j];
+        }
+    }
+}   
