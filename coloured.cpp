@@ -34,6 +34,7 @@ void mirror();
 void crop();
 void skew_right();
 void skew_up();
+void shuffle();
 
 int main() {
     int  q = 1;
@@ -50,11 +51,12 @@ int main() {
         cout << "8 - Enlarge Image"<<endl;
         cout << "9 - Shrink "<<endl;
         cout << "a - mirror" <<endl;
-        cout << "b - crop" <<endl;
+        cout << "b - shuffle" <<endl;
         cout << "c - Blur Image"<<endl;
         cout << "d - Crop Image"<<endl;
         cout << "e - Skew image right "<<endl;
         cout << "f - Skew image up" << endl;
+        cout << "s - To Save image "<<endl;
         cout << "0 - Exist "<<endl;
         cout << "Enter your choice (1-9)or(a-f): ";
         cin >> choice;
@@ -89,6 +91,9 @@ int main() {
                 break;
             case 'a':
                 mirror();
+                break;
+            case 'b':
+                shuffle();
                 break;
             case 'c':
                 Blur() ;
@@ -148,22 +153,22 @@ void black_white() {
     loadImage();
     for(int i = 0;i < SIZE;i++){
         for(int j = 0;j < SIZE;j++){
-            //   if(image1[i][j][0] > 127)
-            //   {
-            //         image[i][j][0] = 255;
-            //         image[i][j][1] = 255;
-            //         image[i][j][2] = 255;
-            //   }
-            //   else
-            //   {
-            //         image[i][j][0] = 0;
-            //         image[i][j][1] = 0;
-            //         image[i][j][2] = 0;
-            //   }
-            int black_white = (image1[i][j][0] + image1[i][j][1] + image1[i][j][2])/3;
-            image[i][j][0] = black_white;
-            image[i][j][1] = black_white;
-            image[i][j][2] = black_white;
+              if((image1[i][j][0] + image1[i][j][1] + image1[i][j][2])/3> 127)
+              {
+                    image[i][j][0] = 255;
+                    image[i][j][1] = 255;
+                    image[i][j][2] = 255;
+              }
+              else
+              {
+                    image[i][j][0] = 0;
+                    image[i][j][1] = 0;
+                    image[i][j][2] = 0;
+              }
+            // int black_white = (image1[i][j][0] + image1[i][j][1] + image1[i][j][2])/3;
+            // image[i][j][0] = black_white;
+            // image[i][j][1] = black_white;
+            // image[i][j][2] = black_white;
 
         }
     }
@@ -178,7 +183,7 @@ void detected_edges() {
             //image[i][j][0] = black_white;
             //image[i][j][1] = black_white;
             //image[i][j][2] = black_white;
-              if(image1[i][j][0] > 127)
+              if((image1[i][j][0] + image1[i][j][1] + image1[i][j][2])/3> 127)
               {
                     image2[i][j][0] = 255;
                     image2[i][j][1] = 255;
@@ -193,25 +198,25 @@ void detected_edges() {
 
         }
     }
-    // for(int i = 0;i < SIZE;i++)
-    // {
-    //     for(int j = 0;j < SIZE;j++)
-    //     {
-    //         if(image2[i][j][0] == 0 && image2[i][j-1][0] == 0 && image2[i][j+1][0] == 0 && image2[i-1][j][0] == 0 && image2[i+1][j][0] == 0)
-    //         {
-    //             image[i][j][0] = 255;
-    //             image[i][j][1] = 255;
-    //             image[i][j][2] = 255;
+    for(int i = 0;i < SIZE;i++)
+    {
+        for(int j = 0;j < SIZE;j++)
+        {
+            if(image2[i][j][0] == 0 && image2[i][j-1][0] == 0 && image2[i][j+1][0] == 0 && image2[i-1][j][0] == 0 && image2[i+1][j][0] == 0)
+            {
+                image[i][j][0] = 255;
+                image[i][j][1] = 255;
+                image[i][j][2] = 255;
 
-    //         }
-    //         else
-    //         {
-    //             image[i][j][0] = image2[i][j][0];
-    //             image[i][j][1] = image2[i][j][1];
-    //             image[i][j][2] = image2[i][j][2];
-    //         }
-    //     }
-    // }
+            }
+            else
+            {
+                image[i][j][0] = image2[i][j][0];
+                image[i][j][1] = image2[i][j][1];
+                image[i][j][2] = image2[i][j][2];
+            }
+        }
+    }
 }
 void inverse()
 {
@@ -521,9 +526,9 @@ void Blur(){
         {
             for(int j = 0;j < SIZE;j++)
             {
-                image[i][j][1] =(image1[i][j][1] + image1[i][j+1][1] + image1[i+1][j+1][1] + image1[i+1][j][1] + image1[i-1][j-1][1]+ image1[i-1][j][1] + image1[i][j-1][1] ) / 7;
-                image[i][j][0] =(image1[i][j][0] + image1[i][j+1][0] + image1[i+1][j+1][0] + image1[i+1][j][0] + image1[i-1][j-1][0]+ image1[i-1][j][0] + image1[i][j-1][0] ) / 7;
-                image[i][j][2] =(image1[i][j][2] + image1[i][j+1][2] + image1[i+1][j+1][2] + image1[i+1][j][2] + image1[i-1][j-1][2]+ image1[i-1][j][2] + image1[i][j-1][2] ) / 7;
+                image[i][j][1] =(image1[i][j][1] + image1[i][j+1][1] + image1[i+1][j+1][1] + image1[i+1][j][1] + image1[i-1][j-1][1]+ image1[i-1][j][1] + image1[i][j-1][1] + image1[i+1][j-1][1] + image1[i-1][j+1][1] ) / 9;
+                image[i][j][0] =(image1[i][j][0] + image1[i][j+1][0] + image1[i+1][j+1][0] + image1[i+1][j][0] + image1[i-1][j-1][0]+ image1[i-1][j][0] + image1[i][j-1][0]+ image1[i+1][j-1][0] + image1[i-1][j+1][0]  ) / 9;
+                image[i][j][2] =(image1[i][j][2] + image1[i][j+1][2] + image1[i+1][j+1][2] + image1[i+1][j][2] + image1[i-1][j-1][2]+ image1[i-1][j][2] + image1[i][j-1][2] + image1[i+1][j-1][2] + image1[i-1][j+1][2] ) / 9;
 
             }
         }
@@ -705,35 +710,78 @@ void skew_up()
     }
 }
 
-// void shuffle()
-// {
-//     int start_i[4] = {0, 0, 127, 127};
-//     int end_i[4] = {127, 127, SIZE, SIZE};
-//     int start_j[4] = {0, 127, 0, 127};
-//     int start_i[4] = {127, SIZE, 127, SIZE};
+void shuffle()
+{
+    loadImage();
+    int start_i[4] = {0, 0, 127, 127};
+    // int end_i[4] = {127, 127, SIZE, SIZE};
+    int start_j[4] = {0, 127, 0, 127};
+    // int end_j[4] = {127, SIZE, 127, SIZE};
 
-//     int arr[4];
-//     cin >> arr[0];
-//     cin >> arr[1];
-//     cin >> arr[2];
-//     cin >> arr[3];
-//     for(int q = 0;q < 4;q++)
-//     {
-//         if(arr[q] == 1)
-//         {
-//             for(int i = ;i <127;i++)
-//         }
-//         if(arr[q] == 2)
-//         {
+    int arr[4];
 
-//         }
-//         if(arr[q] == 3)
-//         {
+    cout << "enter quarters : ";
+    for(int i = 0;i < 4;i++)
+    {
+        cin >> arr[i];
+    }
 
-//         }
-//         if(arr[q] == 4)
-//         {
+    for(int i = 0;i < 127;i++)
+    {
+        for(int j = 0;j < 127;j++)
+        {
+            int a = start_i[arr[0] - 1];
+            int b = start_j[arr[0] - 1];
+            image[i][j][0] = image1[a+i][b+j][0];
+            image[i][j][1] = image1[a+i][b+j][1];
+            image[i][j][2] = image1[a+i][b+j][2];
+        }
+    }
+    int a = start_i[arr[1]-1], b = 0;
+    if(start_j[arr[1] - 1] == 0){
+        b = -127;
+    }
 
-//         }
-//     }
-// }
+    for(int i = 0;i < 127;i++)
+    {
+        for(int j = 127;j < SIZE;j++)
+        {
+            image[i][j][0] = image1[i+a][j+b][0];
+            image[i][j][1] = image1[i+a][j+b][1];
+            image[i][j][2] = image1[i+a][j+b][2];
+        }
+    }
+    a = 0;
+    b = start_j[arr[2]-1];
+    if(start_i[arr[2] - 1] == 0){
+        a = -127;
+    }
+    for(int i = 127;i < SIZE;i++)
+    {
+        for(int j = 0;j < 127;j++)
+        {
+            image[i][j][0] = image1[a+i][b+j][0];
+            image[i][j][1] = image1[a+i][b+j][1];
+            image[i][j][2] = image1[a+i][b+j][2];
+        }
+    }
+    a = 0;
+    b = 0;
+    if(start_i[arr[3]-1] == 0)
+    {
+        a = -127;
+    }
+    if(start_j[arr[3]-1] == 0)
+    {
+        b = -127;
+    }
+    for(int i = 127;i < SIZE;i++)
+    {
+        for(int j = 127;j < SIZE;j++)
+        {
+            image[i][j][0] = image1[a+i][b+j][0];
+            image[i][j][1] = image1[a+i][b+j][1];
+            image[i][j][2] = image1[a+i][b+j][2];
+        }
+    }
+}   
