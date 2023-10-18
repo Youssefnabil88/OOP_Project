@@ -7,7 +7,12 @@
  Teaching Assistant:		xxxxx xxxxx
  Purpose: Make filters for gray images
 */
-
+#include <iostream>
+#include <fstream>
+#include <cstring>
+#include <cmath>
+#include "bmplib.cpp"
+#include "bmplib.h"
 
 using namespace std;
 unsigned char image[SIZE][SIZE][3];
