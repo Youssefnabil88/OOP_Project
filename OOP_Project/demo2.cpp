@@ -551,3 +551,46 @@ void skew_right() {
         }
     }
 }
+void skew_up()
+{
+    char imageFileName[100];
+
+    // Get gray scale image file name
+    cout << "Enter the source image file name: ";
+    cin >> imageFileName;
+
+    // Add to it .bmp extension and load image
+    strcat (imageFileName, ".bmp");
+    readRGBBMP(imageFileName, image1);
+
+    double deg;
+    cout << "Enter deg : ";
+    cin >> deg;
+    double left = tan(deg * 3.14159 / 180.0) * SIZE;
+    double step_for_original = (double) SIZE / (SIZE - left);
+    double step_for_new = (double) left / SIZE;
+    double here = 0;
+    double curr = 0;
+
+    for(int j = 0;j < SIZE;j++)
+    {
+        curr = 0;
+        for(int i = left - here;i < SIZE - here;i++)
+        {
+
+
+            int old_curr = max(0, (int) ceil(curr - step_for_original));
+            int new_curr = min(SIZE, (int) ceil(curr + step_for_original));
+            int sum = 0;
+            int pixles = new_curr - old_curr;
+
+            for(int c = old_curr;c < new_curr;c++)
+            {
+                sum += image1[c][j];
+            }
+            image[i][j] = sum / max(1, pixles);
+            curr += step_for_original;
+        }
+        here += step_for_new;
+    }
+}
