@@ -57,6 +57,7 @@ int main() {
         cout << "d - Crop Image"<<endl;
         cout << "e - Skew image right "<<endl;
         cout << "f - Skew image up" << endl;
+        cout << "s - To Save Image "<<endl;
         cout << "0 - Exist "<<endl;
         cout << "Enter your choice (1-9)or(a-f): ";
         cin >> choice;
